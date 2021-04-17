@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.brianmviana.events.models.Event;
 import dev.brianmviana.events.repository.EventRepository;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
+@Api(value="Events rest API")
 @RestController
 @RequestMapping("/events")
 public class EventResource {
@@ -20,17 +23,20 @@ public class EventResource {
 	@Autowired
 	private EventRepository eventRepository;
 	
+	@ApiOperation(value="Return a events list")
 	@GetMapping(produces="application/json")
 	public @ResponseBody Iterable<Event> listEvent() {
 		Iterable<Event> eventslist = eventRepository.findAll();
 		return eventslist;
 	}
-	
+
+	@ApiOperation(value="Save a new event")
 	@PostMapping
 	public Event saveEvent(@RequestBody @Valid Event event) {
 		return eventRepository.save(event);
 	}
-	
+
+	@ApiOperation(value="delete a event")
 	@DeleteMapping
 	public Event deleteEvent(@RequestBody Event event) {
 		eventRepository.delete(event);
