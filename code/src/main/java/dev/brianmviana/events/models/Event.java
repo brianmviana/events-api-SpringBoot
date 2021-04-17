@@ -3,9 +3,8 @@ package dev.brianmviana.events.models;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.validation.constraints.NotBlank;
-
-import org.springframework.data.annotation.Id;
+import javax.persistence.Id;
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 public class Event {
@@ -17,7 +16,6 @@ public class Event {
 	@NotBlank
 	private String name;
 	
-	
 	@NotBlank
 	private String local;
 	
@@ -26,8 +24,7 @@ public class Event {
 	
 	@NotBlank
 	private String eventTime;
-	
-	
+		
 	public long getId() {
 		return id;
 	}
