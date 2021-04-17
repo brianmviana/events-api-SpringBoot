@@ -7,5 +7,7 @@ import dev.brianmviana.events.models.Event;
 
 @Repository
 public interface EventRepository extends JpaRepository<Event, String> {
-
+	
+	Event findById(long id);
+	
 }

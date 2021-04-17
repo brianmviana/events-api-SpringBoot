@@ -1,9 +1,14 @@
 package dev.brianmviana.events.resouces;
 
+import java.util.ArrayList;
 import javax.validation.Valid;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,9 +30,25 @@ public class EventResource {
 	
 	@ApiOperation(value="Return a events list")
 	@GetMapping(produces="application/json")
-	public @ResponseBody Iterable<Event> listEvent() {
+	public @ResponseBody ArrayList<Event> listEvent() {
 		Iterable<Event> eventslist = eventRepository.findAll();
-		return eventslist;
+		ArrayList<Event> events = new ArrayList<Event>();
+		for (Event event : eventslist) {
+			long id = event.getId();
+			//Method method = EventResource.class.getMethod("getEvent", Long.class);
+			//Link link = linkTo(method, id).withSelfRel();
+			event.add(linkTo(methodOn(EventResource.class).getEvent(id)).withSelfRel());
+			events.add(event);
+		}
+		return events;
+	}
+	
+	@ApiOperation(value="Return a event")
+	@GetMapping(value = "/{id}",produces = "application/json")
+	public @ResponseBody Event getEvent(@PathVariable(value = "id") long id) {
+		Event event = eventRepository.findById(id);
+		event.add(linkTo(methodOn(EventResource.class).listEvent()).withRel("Events list"));
+		return event;
 	}
 
 	@ApiOperation(value="Save a new event")
